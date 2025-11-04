@@ -2,23 +2,58 @@ import React from 'react';
 import Spline from '@splinetool/react-spline';
 import { ArrowRight, Shield, Users } from 'lucide-react';
 
-export default function Hero() {
+function Coin({ delay = 0, x = '10%', size = 28 }) {
   return (
-    <section className="relative min-h-[90vh] w-full overflow-hidden bg-slate-950">
+    <div
+      className="pointer-events-none absolute top-[-60px] z-10"
+      style={{ left: x, animationDelay: `${delay}s` }}
+    >
+      <div
+        className="animate-coin-fall"
+        style={{ animationDelay: `${delay}s` }}
+      >
+        <div
+          className="h-7 w-7 rounded-full bg-gradient-to-br from-yellow-300 via-amber-400 to-orange-500 shadow-[0_0_20px_rgba(251,191,36,0.35)] ring-1 ring-yellow-300/60"
+          style={{ height: size, width: size }}
+        />
+      </div>
+    </div>
+  );
+}
+
+export default function Hero() {
+  const coins = [
+    { delay: 0.2, x: '8%', size: 22 },
+    { delay: 0.6, x: '22%', size: 28 },
+    { delay: 0.9, x: '38%', size: 20 },
+    { delay: 1.3, x: '55%', size: 26 },
+    { delay: 1.6, x: '72%', size: 18 },
+    { delay: 2.1, x: '86%', size: 24 },
+  ];
+
+  return (
+    <section className="relative min-h-[92vh] w-full overflow-hidden bg-slate-950">
       {/* 3D Background */}
       <div className="absolute inset-0 z-0">
         <Spline 
-          scene="https://prod.spline.design/IKzHtP5ThSO83edK/scene.splinecode" 
+          scene="https://prod.spline.design/44zrIZf-iQZhbQNQ/scene.splinecode" 
           style={{ width: '100%', height: '100%' }}
         />
       </div>
 
-      {/* Soft gradient + vignette for readability */}
-      <div className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-b from-slate-950/50 via-slate-950/40 to-slate-950/80" />
-      <div className="pointer-events-none absolute inset-0 z-10 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.10),rgba(2,6,23,0)_50%)]" />
+      {/* Glow energy gradients for readability + vibe */}
+      <div className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-b from-slate-950/40 via-slate-950/30 to-slate-950/80" />
+      <div className="pointer-events-none absolute inset-0 z-10 bg-[radial-gradient(ellipse_at_center,rgba(250,204,21,0.12),rgba(2,6,23,0)_55%)]" />
+
+      {/* Coin rain overlay */}
+      <div className="pointer-events-none absolute inset-0 z-20">
+        {coins.map((c, i) => (
+          <Coin key={i} delay={c.delay} x={c.x} size={c.size} />
+        ))}
+      </div>
 
       {/* Content */}
-      <div className="relative z-20 mx-auto flex max-w-7xl flex-col items-center px-6 pt-28 pb-20 text-center sm:px-8">
+      <div className="relative z-30 mx-auto flex max-w-7xl flex-col items-center px-6 pt-28 pb-20 text-center sm:px-8">
         <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-medium tracking-wide text-white/80 backdrop-blur">
           <Shield className="h-4 w-4 text-emerald-400" />
           Bank-grade security • Family-ready
@@ -28,8 +63,8 @@ export default function Hero() {
           Hub Finance
         </h1>
         <p className="mt-4 max-w-2xl text-base text-white/80 sm:text-lg">
-          A modern wealth hub to plan, track, and grow everything you own —
-          across accounts, assets, and family members — all in one place.
+          Manage and grow your entire household wealth — with real-time insights,
+          automation, and dazzling clarity.
         </p>
 
         <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row">
@@ -41,10 +76,10 @@ export default function Hero() {
             <ArrowRight className="h-4 w-4" />
           </a>
           <a
-            href="#features"
+            href="#stats"
             className="inline-flex items-center justify-center gap-2 rounded-lg border border-white/15 bg-white/5 px-5 py-3 text-white transition hover:bg-white/10"
           >
-            See how it works
+            See the numbers
           </a>
         </div>
 
@@ -53,7 +88,7 @@ export default function Hero() {
             {[0, 1, 2, 3].map((i) => (
               <div
                 key={i}
-                className="h-8 w-8 rounded-full border border-white/20 bg-gradient-to-br from-amber-400 to-pink-500"
+                className="h-8 w-8 rounded-full border border-white/20 bg-gradient-to-br from-amber-400 to-blue-500"
               />
             ))}
           </div>
@@ -63,6 +98,19 @@ export default function Hero() {
           </div>
         </div>
       </div>
+
+      {/* Keyframes */}
+      <style>{`
+        @keyframes coinFall {
+          0% { transform: translateY(-80px) rotateY(0deg) rotateZ(0deg); opacity: 0; }
+          10% { opacity: 1; }
+          80% { opacity: 1; }
+          100% { transform: translateY(110vh) rotateY(540deg) rotateZ(45deg); opacity: 0; }
+        }
+        .animate-coin-fall { 
+          animation: coinFall 3.8s ease-in infinite; 
+        }
+      `}</style>
     </section>
   );
 }
